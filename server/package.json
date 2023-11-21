@@ -12,14 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@apollo/server": "^4.4.0",
-    "bcrypt": "^5.0.0",
+    "@apollo/server": "^4.7.2",
+    "bcrypt": "^4.0.1",
     "express": "^4.17.2",
-    "jsonwebtoken": "^8.5.1",
     "graphql": "^16.6.0",
-    "mongoose": "^6.1.6",
-    "stripe": "^8.67.0",
-    "dotenv": "^16.0.3"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^7.0.2",
+    "stripe": "^8.67.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

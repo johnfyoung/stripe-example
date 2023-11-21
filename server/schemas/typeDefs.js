@@ -1,4 +1,4 @@
-const typeDefs = `#graphql
+const typeDefs = `
   type Category {
     _id: ID
     name: String

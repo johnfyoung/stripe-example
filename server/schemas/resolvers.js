@@ -1,8 +1,8 @@
-const { GraphQLError } = require("graphql");
 const { User, Product, Category, Order } = require("../models");
-const { signToken } = require("../utils/auth");
-require("dotenv").config();
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const { signToken, AuthenticationError } = require("../utils/auth");
+const stripe = require("stripe")(
+  "sk_test_51MmUhiJWBUm8M1eN7zGH87OtGnQPi1BiZMFgpcHzpEQa86sUDL0pGs6mV9fuddjdJrEImyvK5tJCqexf4DBJOo5000BOOUZLm7"
+);
 
 const resolvers = {
   Query: {
@@ -39,11 +39,7 @@ const resolvers = {
         return user;
       }
 
-      throw new GraphQLError("Not logged in!", {
-        extensions: {
-          code: "UNAUTHENTICATED",
-        },
-      });
+      throw AuthenticationError;
     },
     order: async (parent, { _id }, context) => {
       if (context.user) {
@@ -55,11 +51,7 @@ const resolvers = {
         return user.orders.id(_id);
       }
 
-      throw new GraphQLError("Not logged in!", {
-        extensions: {
-          code: "UNAUTHENTICATED",
-        },
-      });
+      throw AuthenticationError;
     },
     checkout: async (parent, args, context) => {
       const url = new URL(context.headers.referer).origin;
@@ -106,7 +98,6 @@ const resolvers = {
       return { token, user };
     },
     addOrder: async (parent, { products }, context) => {
-      console.log(context);
       if (context.user) {
         const order = new Order({ products });
 
@@ -117,11 +108,7 @@ const resolvers = {
         return order;
       }
 
-      throw new GraphQLError("Not logged in!", {
-        extensions: {
-          code: "UNAUTHENTICATED",
-        },
-      });
+      throw AuthenticationError;
     },
     updateUser: async (parent, args, context) => {
       if (context.user) {
@@ -130,11 +117,7 @@ const resolvers = {
         });
       }
 
-      throw new GraphQLError("Not logged in!", {
-        extensions: {
-          code: "UNAUTHENTICATED",
-        },
-      });
+      throw AuthenticationError;
     },
     updateProduct: async (parent, { _id, quantity }) => {
       const decrement = Math.abs(quantity) * -1;
@@ -149,21 +132,13 @@ const resolvers = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new GraphQLError("Incorrect credentials", {
-          extensions: {
-            code: "UNAUTHENTICATED",
-          },
-        });
+        throw AuthenticationError;
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new GraphQLError("Incorrect credentials", {
-          extensions: {
-            code: "UNAUTHENTICATED",
-          },
-        });
+        throw AuthenticationError;
       }
 
       const token = signToken(user);

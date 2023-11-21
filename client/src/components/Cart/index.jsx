@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { useLazyQuery } from "@apollo/client";
 import { QUERY_CHECKOUT } from "../../utils/queries";
@@ -9,7 +9,9 @@ import { useStoreContext } from "../../utils/GlobalState";
 import { TOGGLE_CART, ADD_MULTIPLE_TO_CART } from "../../utils/actions";
 import "./style.css";
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(
+  "pk_test_51MmUhiJWBUm8M1eNwnQnCaTMP2ku0IIEfoXqzc20rGtMIjefHCxfwHTxR4ykoamDfxiVlwAX9HcKZCHpi2q7Fi1y00k0Wyt9Y7"
+);
 
 const Cart = () => {
   const [state, dispatch] = useStoreContext();
